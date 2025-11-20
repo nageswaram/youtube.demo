@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options:
+          - qa
+          - prod
+        required: true
+---      
+- name: Create .env based on environment
+        run: |
+          if [ "${{ github.event.inputs.environment }}" = "qa" ]; then
+            echo "BASE_URL=${{ secrets.QA_BASE_URL }}" >> .env
+            echo "USERNAME=${{ secrets.QA_USERNAME }}" >> .env
+            echo "PASSWORD=${{ secrets.QA_PASSWORD }}" >> .env
+          else
+            echo "BASE_URL=${{ secrets.PROD_BASE_URL }}" >> .env
+            echo "USERNAME=${{ secrets.PROD_USERNAME }}" >> .env
+            echo "PASSWORD=${{ secrets.PROD_PASSWORD }}" >> .env
+          fi
